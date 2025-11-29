@@ -6,5 +6,28 @@
   </head>
   <body>
     <h1>Welcome to the control app</h1>
+    <button id="up">Up</button>
+    <button id="down">Down</button>
   </body>
+
+  <script>
+    const vehicleId = 1; // Example vehicle ID
+    const controlSocket = new WebSocket(
+      "ws://" + window.location.host + "/ws/control/"
+    );
+
+    controlSocket.onmessage = function (event) {
+      const data = JSON.parse(event.data);
+      console.log(data.message);
+    };
+
+    document.querySelector("#up").onclick = () => {
+      console.log("Up button clicked");
+      controlSocket.send(JSON.stringify({ command: 1 }));
+    };
+
+    document.querySelector("#down").onclick = () => {
+      controlSocket.send(JSON.stringify({ command: 2 }));
+    };
+  </script>
 </html>

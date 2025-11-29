@@ -5,5 +5,5 @@ def home(request):
     return render(request, "home.html")
 
 def control_vehicle(request):
-    result = vehicle_controller.initiate_vehicle_control()
-    return render(request, "home.html", {"result": result})
+    vehicle_controller.initiate_vehicle_control()
+    return render(request, "home.html", {"result": "ok"})

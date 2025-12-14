@@ -1,9 +1,51 @@
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from control_server.controllers import vehicle_controller
+from control_server.controllers import user_controller, vehicle_controller 
+import json
+
+
+def admin_authenticate(request):
+    # Implement authentication logic here
+    user_data = json.loads(request.body)
+    print(body)
+    return JsonResponse({"status": "ok", "message": "We sent a code to your email."})
+
+def admin_dashboard(request):
+    return render(request, "admin_dashboard.html")
+
+def admin_login(request):
+    print("request", request)
+    return render(request, "admin_login.html")
+
+def authenticate(request, email, password):
+    # Implement authentication logic here
+    print(email, password)
+    return render(request, "login.html")
+    pass
+
+def control_vehicle(request):
+    vehicle_controller.initiate_vehicle_control()
+    return render(request, "control.html", {"result": "ok"})
 
 def home(request):
     return render(request, "home.html")
 
-def control_vehicle(request):
-    vehicle_controller.initiate_vehicle_control()
-    return render(request, "home.html", {"result": "ok"})
+def login(request):
+    # response = "Please enter the code sent to your email."
+    if request.method != "GET":
+        return render(request, "login.html", {"error": "Invalid request method."})
+
+    print("request", request)
+    # return {"status": "ok", "message": response}
+    return render(request, "login.html")
+
+def register(request):
+    if request.method != "POST":
+        # Handle registration logic here
+        return JsonResponse({"status": "error", "message": "Invalid request method."})  
+    
+    user_data = json.loads(request.body)
+    
+    user_controller.register_user(user_data)
+    print("Registered user:", user_data)
+    return JsonResponse({"status": "ok", "message": "Registration successful."})

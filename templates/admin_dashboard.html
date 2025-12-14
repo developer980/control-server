@@ -1,0 +1,87 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin dashboard</title>
+
+    <link rel="stylesheet" href="/static/css/buttons.css" />
+    <link rel="stylesheet" href="/static/css/forms.css" />
+    <link rel="stylesheet" href="/static/css/inputs.css" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+  </head>
+  <body>
+    <form class="form-primary" action="">
+      <h3 class="title-primary">Add new user</h3>
+      <div class="input-field">
+        <label for="vehicle-id"> First name</label><br />
+        <input
+          class="input-primary"
+          id="first-name-input"
+          name="first-name"
+          type="text"
+          placeholder="First name"
+        /><br />
+      </div>
+
+      <div class="input-field">
+        <label for="vehicle-id"> Last name </label><br />
+        <input
+          class="input-primary"
+          id="last-name-input"
+          name="last-name"
+          type="text"
+          placeholder="Last name"
+        /><br />
+      </div>
+      <div class="input-field">
+        <label for="email"> Email</label><br />
+        <input
+          class="input-primary"
+          id="email-input"
+          name="email"
+          type="text"
+          placeholder="Email"
+        /><br />
+      </div>
+
+      <button type="submit" class="button-primary">Register user</button>
+    </form>
+
+    <script>
+      document.querySelector(".form-primary").onsubmit = async (e) => {
+        e.preventDefault();
+
+        const characters =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const email = document.querySelector("#email-input").value;
+        const firstName = document.querySelector("#first-name-input").value;
+        const lastName = document.querySelector("#last-name-input").value;
+        const route = `http://127.0.0.1:8000/api/c-admin/auth/register/`;
+        const password = characters
+          .split("")
+          .sort(() => 0.5 - Math.random())
+          .join("")
+          .slice(0, 15);
+
+        console.log(password);
+
+        const response = await fetch(route, {
+          method: "POST",
+          body: JSON.stringify({
+            email,
+            password,
+            first_name: firstName,
+            last_name: lastName,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+        });
+
+        const data = await response.json();
+        console.log(data);
+      };
+    </script>
+  </body>
+</html>

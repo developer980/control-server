@@ -2,32 +2,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello there!</title>
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="/static/css/buttons.css" />
+    <link rel="stylesheet" href="/static/css/forms.css" />
+    <link rel="stylesheet" href="/static/css/inputs.css" />
+    <link rel="stylesheet" href="/static/css/main.css" />
   </head>
+
   <body>
-    <h1>Welcome to the control app</h1>
-    <button id="up">Up</button>
-    <button id="down">Down</button>
+    <form class="form-primary" action="auth/login/">
+      <!-- {% csrf_token %} -->
+      <div class="input-field">
+        <label for="email"> Email</label><br />
+        <input
+          class="input-primary"
+          id="email"
+          name="email"
+          type="text"
+          placeholder="Email"
+        /><br />
+      </div>
+      <div class="input-field">
+        <label for="password">Password</label><br />
+        <input
+          class="input-primary"
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Password"
+        /><br />
+      </div>
+      <button type="submit" class="button-primary">Login</button>
+    </form>
   </body>
-
-  <script>
-    const vehicleId = 1; // Example vehicle ID
-    const controlSocket = new WebSocket(
-      "ws://" + window.location.host + "/ws/control/"
-    );
-
-    controlSocket.onmessage = function (event) {
-      const data = JSON.parse(event.data);
-      console.log(data.message);
-    };
-
-    document.querySelector("#up").onclick = () => {
-      console.log("Up button clicked");
-      controlSocket.send(JSON.stringify({ command: 1 }));
-    };
-
-    document.querySelector("#down").onclick = () => {
-      controlSocket.send(JSON.stringify({ command: 2 }));
-    };
-  </script>
 </html>

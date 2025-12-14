@@ -1,0 +1,12 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.title-primary {
+  /* text-align: center; */
+  color: #7b818a;
+  /* margin-bottom: 20px; */
+}

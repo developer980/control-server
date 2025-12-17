@@ -27,6 +27,10 @@ def control_vehicle(request):
     vehicle_controller.initiate_vehicle_control()
     return render(request, "control.html", {"result": "ok"})
 
+def fetch_users(request):
+    users = user_controller.fetch_users()
+    return JsonResponse({"status": "ok", "values": users})
+
 def home(request):
     return render(request, "home.html")
 

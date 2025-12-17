@@ -23,11 +23,12 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
-    path('c-admin/auth/login/', views.admin_login, name='admin_login'),
-    path('api/c-admin/auth/login/', views.admin_authenticate, name='admin_authenticate'),
-    path('c-admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    path('auth/login/', views.login, name='login'),
     path('api/auth/login/', views.authenticate, name='authenticate'),
+    path('api/c-admin/auth/login/', views.admin_authenticate, name='admin_authenticate'),
     path('api/c-admin/auth/register/', views.register, name='register'),
+    path('auth/login/', views.login, name='login'),
+    path('api/users/', views.fetch_users, name='users'),
+    path('c-admin/auth/login/', views.admin_login, name='admin_login'),
+    path('c-admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('control/', views.control_vehicle, name='control')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

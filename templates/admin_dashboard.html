@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="/static/css/buttons.css" />
     <link rel="stylesheet" href="/static/css/forms.css" />
     <link rel="stylesheet" href="/static/css/inputs.css" />
+    <link rel="stylesheet" href="/static/css/lists.css" />
     <link rel="stylesheet" href="/static/css/main.css" />
   </head>
   <body>
-    <form class="form-primary" action="">
+    <form id="add-user-form" class="form-primary" action="">
       <h3 class="title-primary">Add new user</h3>
       <div class="input-field">
         <label for="vehicle-id"> First name</label><br />
@@ -47,41 +48,17 @@
       <button type="submit" class="button-primary">Register user</button>
     </form>
 
-    <script>
-      document.querySelector(".form-primary").onsubmit = async (e) => {
-        e.preventDefault();
+    <div id="users-list" class="table-list-primary">
+      <div class="table-list-primary-item">
+        <div class=""><b>ID</b></div>
+        <div class=""><b>First name</b></div>
+        <div class=""><b>Last name</b></div>
+        <div class=""><b>Username</b></div>
+        <div class=""><b>Email</b></div>
+      </div>
+    </div>
 
-        const characters =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        const email = document.querySelector("#email-input").value;
-        const firstName = document.querySelector("#first-name-input").value;
-        const lastName = document.querySelector("#last-name-input").value;
-        const route = `http://127.0.0.1:8000/api/c-admin/auth/register/`;
-        const password = characters
-          .split("")
-          .sort(() => 0.5 - Math.random())
-          .join("")
-          .slice(0, 15);
-
-        console.log(password);
-
-        const response = await fetch(route, {
-          method: "POST",
-          body: JSON.stringify({
-            email,
-            password,
-            first_name: firstName,
-            last_name: lastName,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": "{{ csrf_token }}",
-          },
-        });
-
-        const data = await response.json();
-        console.log(data);
-      };
-    </script>
+    <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+    <script src="/static/scripts/adminMain.js"></script>
   </body>
 </html>

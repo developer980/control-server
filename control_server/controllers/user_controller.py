@@ -1,9 +1,5 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.http import HttpResponse, JsonResponse
-
-def authenticate_user(credentials):
-    
-    pass
 
 def register_user(user_data):
     username = user_data['first_name'].lower() + '_' + user_data['last_name'].lower()
@@ -21,4 +17,16 @@ def register_user(user_data):
     return HttpResponse("ok")
 
 
-    pass
+def fetch_users(email="", first_name="", last_name="", username=""):
+    users = User.objects.all()
+    
+    if email:
+        users = users.filter(email=email)
+    if first_name:
+        users = users.filter(first_name=first_name)
+    if last_name:
+        users = users.filter(last_name=last_name)
+    if username:
+        users = users.filter(username=username)
+    
+    return users.order_by('id')

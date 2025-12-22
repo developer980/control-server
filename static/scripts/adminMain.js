@@ -3,10 +3,32 @@ const csrf_token = document.cookie
   .find((row) => row.startsWith("csrftoken="))
   .split("=")[1];
 
+const fetchUsers = async () => {
+  const route = "http://127.0.0.1:8000/api/users";
+
+  const data = await fetch(route, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrf_token,
+    },
+  });
+
+  const response = await data.json();
+
+  // if (response.status === "ok") {
+  const users = response.results;
+  console.log("users:", users);
+  return users;
+  // }
+};
+
 $(document).ready(async function () {
   console.log("token:", csrf_token);
 
-  userList = await fetchUsers();
+  const userList = await fetchUsers();
+
+  console.log(userList);
 
   const elements = userList.map((user) => {
     return `<div class="table-list-primary-item">
@@ -62,23 +84,3 @@ $(document).ready(async function () {
     }
   });
 });
-
-const fetchUsers = async () => {
-  const route = "http://127.0.0.1:8000/api/users";
-
-  const data = await fetch(route, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": csrf_token,
-    },
-  });
-
-  const response = await data.json();
-
-  if (response.status === "ok") {
-    const users = response.values;
-    console.log(users);
-    return users;
-  }
-};

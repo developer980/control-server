@@ -1,9 +1,9 @@
+import email
 from control_server.controllers import user_controller, vehicle_controller 
-from control_server.serializers import UserSerializer
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse, JsonResponse
+from django.views.generic import ListView
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView
 import json
 
 
@@ -30,19 +30,19 @@ def control_vehicle(request):
     vehicle_controller.initiate_vehicle_control()
     return render(request, "control.html", {"result": "ok"})
 
-class UsersView(ListAPIView):
-    serializer_class = UserSerializer
-
+class UsersView(ListView):
     def get_queryset(self):
-        
-        email = self.request.query_params.get('email', None)
-        first_name = self.request.query_params.get('first_name', None)
-        last_name = self.request.query_params.get('last_name', None)
-        username = self.request.query_params.get('username', None)
+        email = self.request.GET.get('email')
+        first_name = self.request.GET.get('first_name')
+        last_name = self.request.GET.get('last_name')
+        username = self.request.GET.get('username')
 
         users = user_controller.fetch_users(email, first_name, last_name, username)
-
         return users
+    
+    def render_to_response(self, context, **response_kwargs):
+        users = list(self.get_queryset().values())
+        return JsonResponse({"status":"ok", "values":users}, safe=False)
 
 def home(request):
     return render(request, "home.html")

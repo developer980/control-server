@@ -56,6 +56,15 @@
         <div class=""><b>Username</b></div>
         <div class=""><b>Email</b></div>
       </div>
+      {% block content %} {% for user in users %}
+      <div class="table-list-primary-item">
+        <div>{{ user.id }}</div>
+        <div>{{ user.first_name }}</div>
+        <div>{{ user.last_name }}</div>
+        <div>{{ user.username }}</div>
+        <div>{{ user.email }}</div>
+      </div>
+      {% endfor %}{% endblock %}
     </div>
 
     <script src="/static/scripts/jquery-3.7.1.min.js"></script>

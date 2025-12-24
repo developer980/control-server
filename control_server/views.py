@@ -5,11 +5,10 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView
 from django.shortcuts import render
+from django.contrib.auth import backends, authenticate, login
 import json
 
-
 def admin_authenticate(request):
-    # Implement authentication logic here
     user_data = json.loads(request.body)
     print(body)
     return JsonResponse({"status": "ok", "message": "We sent a code to your email."})
@@ -21,11 +20,18 @@ def admin_login(request):
     print("request", request)
     return render(request, "admin_login.html")
 
-def authenticate(request, email, password):
-    # Implement authentication logic here
-    print(email, password)
-    return render(request, "login.html")
-    pass
+def login_view(request):
+    body = request.body
+    email = json.loads(body).get("email")
+    password = json.loads(body).get("password")
+    user = authenticate(request, username=email, password=password)
+
+    if user is not None:
+        # TODO: Add email verification if authentication succesful
+        login(request, user=user)
+        return JsonResponse({"status": "ok", "message": "Login successful."})
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid credentials."})
 
 def control_vehicle(request):
     vehicle_controller.initiate_vehicle_control()
@@ -45,23 +51,19 @@ class UsersView(ListView):
         return user_controller.fetch_users(email, first_name, last_name, username).values("id", "username", "email", "first_name", "last_name")
         
     
-    
 
 def home(request):
     return render(request, "home.html")
 
-def login(request):
-    # response = "Please enter the code sent to your email."
+def login_portal(request):
     if request.method != "GET":
         return render(request, "login.html", {"error": "Invalid request method."})
 
     print("request", request)
-    # return {"status": "ok", "message": response}
     return render(request, "login.html")
 
 def register(request):
     if request.method != "POST":
-        # Handle registration logic here
         return JsonResponse({"status": "error", "message": "Invalid request method."})  
     
     user_data = json.loads(request.body)

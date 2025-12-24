@@ -6,7 +6,7 @@ const csrf_token = document.cookie
 $(document).ready(async function () {
   console.log("token:", csrf_token);
 
-  $("#add-user-form").trigger(async (e) => {
+  $("#add-user-form").on("submit", async (e) => {
     e.preventDefault();
     const characters =
       "!@#$%^&*()-_=+[{]}|;:',.<>/?`~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

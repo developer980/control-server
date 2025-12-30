@@ -1,9 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
-from control_server.controllers import user_controller
 
 class LoginBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(self, username=None, password=None):
         UserModel = get_user_model()
         try:
             user = UserModel.objects.get(email=username)

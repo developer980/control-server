@@ -1,5 +1,26 @@
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import backends, authenticate, login
+# from requests import request
+import json
+
+def authenticate_user(request):
+    body = request.body
+    email = json.loads(body).get("email")
+    password = json.loads(body).get("password")
+    user = authenticate(request, username=email, password=password)
+
+    if user is not None:
+        # TODO: Add email verification if authentication succesful
+        # login(request, user=user)
+        print("Authenticated user:", user.id)
+        return {"status": "ok",
+                "message": "We sent a code to your email.", 
+                "user_id": user.id, 
+                "email": user.email}
+    
+    else:
+        return {"status": "error", "message": "Invalid credentials."}
 
 def register_user(user_data):
     username = user_data['first_name'].lower() + '_' + user_data['last_name'].lower()

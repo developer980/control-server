@@ -17,18 +17,20 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
-from django.urls import path, re_path
+from django.contrib.auth import views
+from django.urls import path
 from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('api/auth/login/', views.login_view, name='authenticate'),
+    path('api/auth/otp-check/', views.otp_verify, name='otp_verify'),
     path('api/c-admin/auth/login/', views.admin_authenticate, name='admin_authenticate'),
     path('api/c-admin/auth/register/', views.register, name='register'),
     path('auth/login/', views.login_portal, name='login'),
     path('c-admin/auth/login/', views.admin_login, name='admin_login'),
     path('c-admin/dashboard/', views.UsersView.as_view(), name='admin_dashboard'),
-    path('control/', views.control_vehicle, name='control')
+    path('control/', views.control_vehicle, name='control'),
+    path('redirect/otp/', views.otp_verify_view, name='otp_redirect'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

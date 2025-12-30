@@ -1,15 +1,16 @@
 import email
-from control_server.controllers import user_controller, vehicle_controller 
+from control_server.controllers import user_controller, vehicle_controller, session_controller
 from django.contrib.auth.models import User, Group
+from django.contrib.auth import backends, authenticate, login
 from django.core.paginator import Paginator
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, cookie, HttpResponseRedirect
 from django.views.generic import ListView
 from django.shortcuts import render
-from django.contrib.auth import backends, authenticate, login
 import json
+import jwt
 
 def admin_authenticate(request):
-    user_data = json.loads(request.body)
+    body = json.loads(request.body)
     print(body)
     return JsonResponse({"status": "ok", "message": "We sent a code to your email."})
 
@@ -20,22 +21,74 @@ def admin_login(request):
     print("request", request)
     return render(request, "admin_login.html")
 
-def login_view(request):
-    body = request.body
-    email = json.loads(body).get("email")
-    password = json.loads(body).get("password")
-    user = authenticate(request, username=email, password=password)
-
-    if user is not None:
-        # TODO: Add email verification if authentication succesful
-        login(request, user=user)
-        return JsonResponse({"status": "ok", "message": "Login successful."})
-    else:
-        return JsonResponse({"status": "error", "message": "Invalid credentials."})
 
 def control_vehicle(request):
     vehicle_controller.initiate_vehicle_control()
     return render(request, "control.html", {"result": "ok"})
+
+
+def home(request):
+    user_id = dict(request.session.items()).get('_auth_user_id')
+
+    user = User.objects.get(id=user_id) if user_id else None
+    if user is None:
+        return HttpResponseRedirect('/auth/login/')
+    user_data = {"id": user.id, "username": user.username, "email": user.email} if user else None
+    print("user", user_data)
+    print("authenticated", request.user.is_authenticated)
+    return render(request, "home.html")
+
+def login_portal(request):
+    if request.method != "GET":
+        return render(request, "login.html", {"error": "Invalid request method."})
+
+    print("request", request)
+    return render(request, "login.html")
+
+def login_view(request):
+    user_login_response = user_controller.authenticate_user(request)
+
+    if user_login_response["status"] != "ok":
+        return JsonResponse(user_login_response)
+
+    token = session_controller.genetate_otp_code(user_login_response["user_id"], user_login_response["email"])
+    response = HttpResponse(JsonResponse({**user_login_response, "redirect_url": "/redirect/otp/"}), content_type="application/json")
+    response.set_cookie("verification_token", token, httponly=True)
+
+    print("user_login_response", user_login_response["email"])
+
+
+    print("sending resaponse", response)
+    return response
+
+def otp_verify_view(request):
+    return render(request, "otp_verification.html")
+
+def otp_verify(request):
+    if request.method != "POST":
+        return JsonResponse({"status": "error", "message": "Invalid request method."})  
+    
+    token_validation_result = session_controller.otp_verify(request)
+    if token_validation_result["status"] != "ok":
+        return JsonResponse(token_validation_result)
+    
+    print("token_validation_result", token_validation_result)
+    
+
+    user = User.objects.get(id=token_validation_result.get("decoded_token").get("id"))
+    print("user", user)
+    login(request, user=user)
+    return JsonResponse({"status": "ok", "message": "OTP verified successfully.", "redirect_url": "/"})
+
+def register(request):
+    if request.method != "POST":
+        return JsonResponse({"status": "error", "message": "Invalid request method."})  
+    
+    user_data = json.loads(request.body)
+    
+    user_controller.register_user(user_data)
+    print("Registered user:", user_data)
+    return JsonResponse({"status": "ok", "message": "Registration successful."})
 
 class UsersView(ListView):
     context_object_name = "users"
@@ -49,25 +102,3 @@ class UsersView(ListView):
         username = self.request.GET.get('username')
 
         return user_controller.fetch_users(email, first_name, last_name, username).values("id", "username", "email", "first_name", "last_name")
-        
-    
-
-def home(request):
-    return render(request, "home.html")
-
-def login_portal(request):
-    if request.method != "GET":
-        return render(request, "login.html", {"error": "Invalid request method."})
-
-    print("request", request)
-    return render(request, "login.html")
-
-def register(request):
-    if request.method != "POST":
-        return JsonResponse({"status": "error", "message": "Invalid request method."})  
-    
-    user_data = json.loads(request.body)
-    
-    user_controller.register_user(user_data)
-    print("Registered user:", user_data)
-    return JsonResponse({"status": "ok", "message": "Registration successful."})

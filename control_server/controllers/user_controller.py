@@ -1,6 +1,6 @@
-from django.contrib.auth.models import User, Group
-from django.http import HttpResponse, JsonResponse
-from django.contrib.auth import backends, authenticate, login
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.contrib.auth import authenticate
 # from requests import request
 import json
 

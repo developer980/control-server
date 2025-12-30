@@ -9,15 +9,7 @@ $(document).ready(function () {
 
     const email = $("#email").val();
     const password = $("#password").val();
-    const route = `http://127.0.0.1:8000/api/auth/login/`;
-
-    // // Simple validation
-    // if (!email || !password) {
-    //   alert("Please enter both username and password.");
-    //   return;
-    // }
-
-    // // Send login data to the server
+    const route = `http://${window.location.host}/api/auth/login/`;
     const data = await fetch(route, {
       method: "POST",
       body: JSON.stringify({
@@ -30,6 +22,13 @@ $(document).ready(function () {
       },
     });
 
-    console.log(data);
+    const response = await data.json();
+
+    if (response.status === "ok") {
+      // Redirect to otp page
+      window.location.href = response.redirect_url;
+    } else {
+      alert(`Error: ${response.message}`);
+    }
   });
 });

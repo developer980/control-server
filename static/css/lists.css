@@ -2,11 +2,13 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  align-items: center;
 }
 
 .table-list-primary-item {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  align-items: center;
 }

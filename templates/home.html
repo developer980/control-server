@@ -3,22 +3,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    {% load static %}
-    <link rel="stylesheet" href="/static/css/buttons.css" />
-    <link rel="stylesheet" href="/static/css/forms.css" />
-    <link rel="stylesheet" href="/static/css/inputs.css" />
-    <link rel="stylesheet" href="/static/css/main.css" />
-    <link rel="stylesheet" href="/static/css/lists.css" />
+    {% load static %} {%include 'styles_include.html' %}
   </head>
 
   <body>
     <main class="grid grid-col-2">
-      <sidebar class="sidebar-primary flex-column flex-column-start gap-16">
-        <h3>Hello, {{user.first_name}}</h3>
-        <div class="sidebar-primary-item">Home</div>
-        <div class="sidebar-primary-item">Profile</div>
-        <div class="sidebar-primary-item">Settings</div>
-      </sidebar>
+      {% include 'sidebar.html' %}
       <content class="container content-primary">
         <div
           class="container-1 container-center flex-column flex-column-center gap-16"

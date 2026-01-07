@@ -1,0 +1,44 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin dashboard</title>
+
+    {%include 'styles_include.html' %}
+  </head>
+  <body>
+    <main class="grid grid-col-2">
+      {% include 'sidebar_admin.html' %}
+      <content class="container content-primary">
+        <div
+          class="container-1 container-center flex-column flex-column-center gap-16"
+        >
+          <div id="users-list" class="table-list-primary">
+            <div class="table-list-primary-item">
+              <div class=""><b>ID</b></div>
+              <div class=""><b>First name</b></div>
+              <div class=""><b>Last name</b></div>
+              <div class=""><b>Username</b></div>
+              <div class=""><b>Email</b></div>
+            </div>
+            {% block content %} {% for user in users %}
+            <div class="table-list-primary-item">
+              <div>{{ user.id }}</div>
+              <div>{{ user.first_name }}</div>
+              <div>{{ user.last_name }}</div>
+              <div>{{ user.username }}</div>
+              <div>{{ user.email }}</div>
+              <div class="flex-row flex-row-center gap-8">
+                <button class="button-primary">Edit</button
+                ><button class="button-primary">Delete</button>
+              </div>
+            </div>
+            {% endfor %}{% endblock %}
+          </div>
+        </div></content
+      >
+    </main>
+    <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+    <script src="/static/scripts/adminMain.js"></script>
+  </body>
+</html>

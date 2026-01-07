@@ -1,0 +1,44 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    {%include 'styles_include.html' %}
+  </head>
+  <body>
+    <main class = "grid grid-col-2">
+        {% include 'sidebar_admin.html' %}
+        <content class="container content-primary">
+            <form id="add-vehicle-form" class="form-primary">
+                <h3 class="title-primary">Add new vehicle</h3>
+                <div class="input-field">
+                    <label for="vehicle-id"> Vehicle ID</label><br />
+                    <input
+                        class="input-primary"
+                        id="vehicle-id-input"
+                        name="vehicle-id"
+                        type="text"
+                        placeholder="Vehicle ID"
+                    /><br />
+                </div>
+
+                <div class="input-field">
+                    <label for="vehicle-password"> Password </label><br />
+                    <input
+                        class="input-primary"
+                        id="vehicle-password-input"
+                        name="vehicle-password"
+                        type="password"
+                        placeholder="Password"
+                    /><br />
+                </div>
+
+                <button type="submit" class="button-primary">Register vehicle</button>
+            </form>
+        </content>
+    </main>
+
+    </main>
+  </body>
+</html>

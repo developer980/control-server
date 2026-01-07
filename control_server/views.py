@@ -9,6 +9,14 @@ from django.shortcuts import render
 import json
 import jwt
 
+def add_vehicle(request):
+    body = json.loads(request.body)
+    vehicle_controller.add_vehicle(body)
+    return JsonResponse({"status": "ok", "message": "Vehicle added successfully."})
+
+def add_user_view(request):
+    return render(request, "add_user.html")
+
 def admin_authenticate(request):
     body = json.loads(request.body)
     user_login_response = user_controller.authenticate_user(request, is_staff=True)
@@ -106,7 +114,7 @@ def register(request):
 
 class UsersView(ListView):
     context_object_name = "users"
-    template_name = "admin_dashboard.html"
+    template_name = "users.html"
     paginate_by = 10
 
     def get_queryset(self):
@@ -116,3 +124,13 @@ class UsersView(ListView):
         username = self.request.GET.get('username')
 
         return user_controller.fetch_users(email, first_name, last_name, username).values("id", "username", "email", "first_name", "last_name")
+
+
+def users_view(request):
+    return render(request, "users.html")
+
+def vehicles_view(request):
+    return render(request, "vehicles.html")
+
+def add_vehicle_view(request):
+    return render(request, "add_vehicle.html")

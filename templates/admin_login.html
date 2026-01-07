@@ -11,7 +11,7 @@
   </head>
 
   <body>
-    <form method="post" class="form-primary">
+    <form id="login-form" class="form-primary">
       <h3 class="title-primary">ADMIN</h3>
       <div class="input-field">
         <label for="email"> Email</label><br />
@@ -37,25 +37,6 @@
     </form>
   </body>
 
-  <script>
-    document.querySelector(".form-primary").onsubmit = async (e) => {
-      e.preventDefault();
-
-      const email = document.querySelector("#email").value;
-      const password = document.querySelector("#password").value;
-      const route = `http://127.0.0.1:8000/api/c-admin/auth/login/`;
-
-      const response = await fetch(route, {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": "{{ csrf_token }}",
-        },
-      });
-
-      const data = await response.json();
-      console.log(data);
-    };
-  </script>
+  <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+  <script src="/static/scripts/adminLogin.js"></script>
 </html>

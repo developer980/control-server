@@ -11,8 +11,16 @@ import jwt
 
 def admin_authenticate(request):
     body = json.loads(request.body)
-    print(body)
-    return JsonResponse({"status": "ok", "message": "We sent a code to your email."})
+    user_login_response = user_controller.authenticate_user(request, is_staff=True)
+
+    if user_login_response["status"] != "ok":
+        return JsonResponse(user_login_response)
+
+    user = user_controller.fetch_user_by_id(user_login_response["user_id"])
+    login(request, user=user)
+    response = HttpResponse(JsonResponse({**user_login_response, "redirect_url": "/c-admin/dashboard/"}), content_type="application/json")
+
+    return response
 
 def admin_dashboard(request):
     return render(request, "admin_dashboard.html")
@@ -33,10 +41,10 @@ def home(request):
     user = User.objects.get(id=user_id) if user_id else None
     if user is None:
         return HttpResponseRedirect('/auth/login/')
-    user_data = {"id": user.id, "username": user.username, "email": user.email} if user else None
+    user_data = {"id": user.id, "username": user.username, "email": user.email, "first_name": user.first_name, "last_name": user.last_name} if user else None
     print("user", user_data)
     print("authenticated", request.user.is_authenticated)
-    return render(request, "home.html")
+    return render(request, "home.html", {"user": user_data})
 
 def login_portal(request):
     if request.method != "GET":
@@ -74,11 +82,17 @@ def otp_verify(request):
     
     print("token_validation_result", token_validation_result)
     
+    redirect_url = "/"
 
     user = User.objects.get(id=token_validation_result.get("decoded_token").get("id"))
+
+    if(user.is_staff is True):
+        redirect_url = "/c-admin/dashboard/"
     print("user", user)
     login(request, user=user)
-    return JsonResponse({"status": "ok", "message": "OTP verified successfully.", "redirect_url": "/"})
+
+    # TODO: add cookie deletion for verification_token
+    return JsonResponse({"status": "ok", "message": "OTP verified successfully.", "redirect_url": redirect_url})
 
 def register(request):
     if request.method != "POST":

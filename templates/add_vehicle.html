@@ -7,38 +7,36 @@
     {%include 'styles_include.html' %}
   </head>
   <body>
-    <main class = "grid grid-col-2">
-        {% include 'sidebar_admin.html' %}
-        <content class="container content-primary">
-            <form id="add-vehicle-form" class="form-primary">
-                <h3 class="title-primary">Add new vehicle</h3>
-                <div class="input-field">
-                    <label for="vehicle-id"> Vehicle ID</label><br />
-                    <input
-                        class="input-primary"
-                        id="vehicle-id-input"
-                        name="vehicle-id"
-                        type="text"
-                        placeholder="Vehicle ID"
-                    /><br />
-                </div>
+    <main class="grid grid-col-2">
+      {% include 'sidebar_admin.html' %}
+      <content class="container content-primary">
+        <form id="add-vehicle-form" class="form-primary">
+          <h3 class="title-primary">Add new vehicle</h3>
+          <div class="input-field">
+            <label for="vehicle-name">Name</label><br />
+            <input
+              class="input-primary"
+              id="vehicle-name"
+              name="vehicle-name"
+              type="text"
+              placeholder="Vehicle name"
+            /><br />
+          </div>
+          <div class="input-field">
+            <label for="types">Choose a vehicle type:</label>
 
-                <div class="input-field">
-                    <label for="vehicle-password"> Password </label><br />
-                    <input
-                        class="input-primary"
-                        id="vehicle-password-input"
-                        name="vehicle-password"
-                        type="password"
-                        placeholder="Password"
-                    /><br />
-                </div>
+            <select name="types" id="vehicle-type" class="input-primary">
+              <option value="utility">Utility</option>
+              <option value="charge">Charge</option>
+            </select>
+          </div>
 
-                <button type="submit" class="button-primary">Register vehicle</button>
-            </form>
-        </content>
+          <button type="submit" class="button-primary">Register vehicle</button>
+        </form>
+      </content>
     </main>
 
-    </main>
+    <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+    <script src="/static/scripts/addVehicle.js"></script>
   </body>
 </html>

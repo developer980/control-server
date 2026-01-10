@@ -2,10 +2,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Admin dashboard</title>
+
     {%include 'styles_include.html' %}
   </head>
   <body>
-    {% include 'sidebar_admin.html' %} Work in progress
+    <main class="grid grid-col-2">
+      {% include 'sidebar_admin.html' %}
+      <content class="container content-primary">
+        <div
+          class="container-1 container-center flex-column flex-column-center gap-16"
+        >
+          <div id="vehicles-list" class="table-list-primary">
+            <div class="table-list-primary-item grid-5">
+              <div class=""><b>ID</b></div>
+              <div class=""><b>Name</b></div>
+              <div class="type"><b>Type</b></div>
+              <div class=""><b>Created At</b></div>
+            </div>
+            {% block content %} {% for vehicle in vehicles %}
+            <div
+              id="{{ vehicle.id }}"
+              data-type="{{vehicle.vehicle_type}}"
+              class="table-list-primary-item grid-5"
+            >
+              <div class="grid-element">{{ vehicle.id }}</div>
+              <div class="grid-element">{{ vehicle.name}}</div>
+              <div class="grid-element">{{ vehicle.vehicle_type }}</div>
+              <div class="grid-element">{{ vehicle.created_at }}</div>
+              <!-- <div class="flex-row flex-row-center gap-8">
+                <button class="button-primary">Edit</button>
+                <button id="generate-password" class="button-primary">
+                  Generate password
+                </button>
+                <button class="button-primary">Delete</button>
+              </div> -->
+
+              <div class="dropdown-field">
+                <div class="dropdown-primary">
+                  <button class="button-primary">Options</button>
+                  <div>
+                    <div class="flex flex-column flex-column-center">
+                      <button class="button-primary">Edit</button
+                      ><button id="generate-password" class="button-primary">
+                        Generate password</button
+                      ><button class="button-primary">Delete</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- <select name="types" id="vehicle-type" class="button-primary">
+                  <option value="utility">Utility</option>
+                  <option value="charge">Charge</option>
+                </select> -->
+              </div>
+            </div>
+            {% endfor %}{% endblock %}
+          </div>
+        </div></content
+      >
+    </main>
+    <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+    <script src="/static/scripts/vehicles.js"></script>
   </body>
 </html>

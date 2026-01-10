@@ -5,6 +5,22 @@
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
+  width: 100%;
+}
+
+.button-1 {
+  width: 100px;
+  height: 40px;
+}
+
+.button-2 {
+  width: 200px;
+  height: 40px;
+}
+
+.button-3 {
+  width: 300px;
+  height: 40px;
 }
 
 .button-primary:hover {
@@ -22,4 +38,25 @@
 
 .button-secondary:hover {
   background-color: #5a6268;
+}
+
+.dropdown-primary {
+  position: relative;
+  padding: 0px 16px;
+  box-sizing: border-box;
+}
+
+.dropdown-primary div {
+  visibility: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0px 16px;
+}
+
+.dropdown-primary:hover div {
+  visibility: visible;
 }

@@ -124,6 +124,17 @@ class UsersView(ListView):
         username = self.request.GET.get('username')
 
         return user_controller.fetch_users(email, first_name, last_name, username).values("id", "username", "email", "first_name", "last_name")
+    
+class VehiclesView(ListView):
+    context_object_name = "vehicles"
+    template_name = "vehicles.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        vehicle_type = self.request.GET.get('type')
+        vehicle_id = self.request.GET.get('vehicle_id')
+
+        return vehicle_controller.fetch_vehicles(vehicle_id, vehicle_type).values("id", "created_at", "name", "vehicle_type")
 
 
 def users_view(request):
@@ -134,3 +145,18 @@ def vehicles_view(request):
 
 def add_vehicle_view(request):
     return render(request, "add_vehicle.html")
+
+def update_vehicle_view(request):
+    return JsonResponse(vehicle_controller.update_vehicle(request))
+
+def vehicle_login_view(request):
+    data = json.loads(request.body)
+    login_result = vehicle_controller.login(data.get("id"), data.get("password"))
+
+    if login_result.status != "ok":
+        return JsonResponse(login_result)
+    
+    response = HttpResponse(JsonResponse(login_result))
+    response.set_cookie("vehicle_token", login_result.token, httponly=True)
+    return response
+    

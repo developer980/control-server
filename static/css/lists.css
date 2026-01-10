@@ -6,9 +6,27 @@
 }
 
 .table-list-primary-item {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
   padding: 10px;
   border-bottom: 1px solid #ddd;
   align-items: center;
+}
+
+.table-list-primary-item .grid-element {
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.grid-6 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
 }

@@ -14,7 +14,7 @@
           class="container-1 container-center flex-column flex-column-center gap-16"
         >
           <div id="users-list" class="table-list-primary">
-            <div class="table-list-primary-item">
+            <div class="table-list-primary-item grid-6">
               <div class=""><b>ID</b></div>
               <div class=""><b>First name</b></div>
               <div class=""><b>Last name</b></div>
@@ -22,7 +22,7 @@
               <div class=""><b>Email</b></div>
             </div>
             {% block content %} {% for user in users %}
-            <div class="table-list-primary-item">
+            <div class="table-list-primary-item grid-6">
               <div>{{ user.id }}</div>
               <div>{{ user.first_name }}</div>
               <div>{{ user.last_name }}</div>
